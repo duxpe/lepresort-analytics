@@ -1,3 +1,6 @@
+#include "utils.h"
+#include <stdbool.h>
+
 
 struct AnalyticsData {
     int comparisonCount;
@@ -9,7 +12,7 @@ typedef struct AnalyticsData TAnalyticsData;
 
 struct DataSet {
     int size;
-    int **data;
+    int *data;
     bool ordered;
     bool is_desc;
 };

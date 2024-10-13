@@ -1,7 +1,4 @@
 #include "leprechaun.h"
-#include "utils.h"
-#include <stdio.h>
-
 
 //Sort Algorithms without analytics
 void selection_sort(int array[], int length){

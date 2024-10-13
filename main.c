@@ -1,7 +1,4 @@
-#include "leprechaun.h"
-#include "utils.h"
-#include <stdio.h>
-
+#include "leprefile.h"
 
 void main(){
     //TODO: Get rid of all this test crap and do the actual menu!
@@ -11,6 +8,22 @@ void main(){
     int array[] = {6,5,3,4,7,8,9,2,1,0};
     int menu = 0;
     int size = get_array_length(sizeof(array), sizeof(array[0]));
+    char name[10] = "data";
+    char file_name[20] = "teste_dataset";
+    T_DataSet data_set;
+    data_set.data = array;
+    data_set.size = 10;
+
+    T_CSV csv;
+    csv.column_names = name;
+    csv.column_ammount = 1;
+    csv.has_index = true;
+    csv.file_name = file_name;
+    csv.line_ammount = data_set.size;
+    csv.separator = ";";
+    
+    write_dataset_to_csv(csv, data_set);
+
     
     printf("This is an unsorted array :( \n");
     print_array(array, size);

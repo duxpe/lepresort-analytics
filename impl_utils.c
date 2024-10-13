@@ -1,6 +1,4 @@
 #include "utils.h"
-#include <stdio.h>
-
 
 void swap(int array[], int i, int j){
     int temp = array[i];
