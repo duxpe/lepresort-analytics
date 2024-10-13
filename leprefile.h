@@ -8,7 +8,7 @@
 
 struct CSV {
     char *file_name;
-    char **column_names;
+    char column_names[100][MAX_LINE_LENGTH];
     int column_ammount;
     int line_ammount;
     char *separator;

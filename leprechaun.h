@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <stdbool.h>
+#include <stdlib.h>
 
 
 struct AnalyticsData {
