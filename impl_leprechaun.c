@@ -97,7 +97,19 @@ void selection_sort(int array[], int length){
     }
 }
 
-void bubble_sort(int array[], int length); //TODO: Implementar Bubble Sort
+void bubble_sort(int array[], int length){
+    int i, j, aux;
+    
+    for(i = 0; i < length; i++){
+        for(j = 0; j < length - 1; j++){
+            if(array[j] > array[j + 1]){
+                aux = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = aux;
+            }
+        }
+    }
+}
 
 void insertion_sort(int array[], int length){    
     for(int i = 1; i<length; i++){
@@ -113,9 +125,44 @@ void insertion_sort(int array[], int length){
 
 }
 
-void merge_sort(int array[], int left, int right); //TODO: Implementar Merge Sort
+void merge_sort(int array[], int left, int right){
+    int middle;
+    if(left < right){
+        middle = (left + right) / 2;
+        merge_sort(array, left, middle);
+        merge_sort(array, middle+1, right);
+        merge_sorted_arrays(array, left, right, middle);
+    }
+}
 
-void merge_sorted_arrays(int array[], int left, int right, int middle);//TODO: Implementar Merge Sort
+void merge_sorted_arrays(int array[], int left, int right, int middle){
+    int free_pos, start_file1, start_file2, index;
+    int aux_file[INT_MAX];
+    start_file1 = left;
+    start_file2 = middle + 1;
+    free_pos = left;
+
+    while (start_file1 <= middle && start_file2 <= right){
+        if(array[start_file1] <= array[start_file2]){
+            aux_file[free_pos] = array[start_file1];
+            start_file1++;
+        }else{
+            aux_file[free_pos] = array[start_file1];
+            start_file2++;
+        }
+        free_pos++;
+    }
+    for(index = start_file1; index <= middle; index++, free_pos++){
+        aux_file[free_pos] = array[index];
+    }
+    for(index = start_file2; index <= left; index++, free_pos++){
+        aux_file[free_pos] = array[index];
+    }
+    for(index = left; index <= right; index++){
+        array[index] = aux_file[index];
+    }
+    
+}
 
 void quick_sort(int array[], int left, int right){
     if(left < right){
@@ -162,7 +209,23 @@ void and_selection_sort(int array[], int length, TAnalyticsData *anData){
     }
 }
 
-void and_bubble_sort(int array[], int length, TAnalyticsData *anData); //TODO: Implementar Bubble Sort com Analytics
+void and_bubble_sort(int array[], int length, TAnalyticsData *anData){
+        int i, j, aux;
+    
+    for(i = 0; i < length; i++){
+        anData->comparisonCount++;
+        for(j = 0; j < length - 1; j++){
+            anData->comparisonCount++;
+            if(array[j] > array[j + 1]){
+                aux = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = aux;
+                anData->swapCount++;
+                anData->comparisonCount++;
+            }
+        }
+    }
+}
 
 void and_insertion_sort(int array[], int length, TAnalyticsData *anData){    
     for(int i = 1; i<length; i++){
@@ -182,9 +245,51 @@ void and_insertion_sort(int array[], int length, TAnalyticsData *anData){
 
 }
 
-void and_merge_sort(int array[], int left, int right, TAnalyticsData *anData); //TODO: Implementar Merge Sort com Analytics
+void and_merge_sort(int array[], int left, int right, TAnalyticsData *anData){
+        int middle;
+    if(left < right){
+        anData->swapCount++;
+        middle = (left + right) / 2;
+        merge_sort(array, left, middle);
+        merge_sort(array, middle+1, right);
+        merge_sorted_arrays(array, left, right, middle);
+    }
+}
 
-void and_merge_sorted_arrays(int array[], int left, int right, int middle, TAnalyticsData *anData); //TODO: Implementar Merge Sort com Analytics
+void and_merge_sorted_arrays(int array[], int left, int right, int middle, TAnalyticsData *anData){
+        int free_pos, start_file1, start_file2, index;
+    int aux_file[INT_MAX];
+    start_file1 = left;
+    start_file2 = middle + 1;
+    free_pos = left;
+
+    while (start_file1 <= middle && start_file2 <= right){
+        if(array[start_file1] <= array[start_file2]){
+            aux_file[free_pos] = array[start_file1];
+            start_file1++;
+            anData->comparisonCount++;
+            anData->swapCount++;
+        }else{
+            aux_file[free_pos] = array[start_file1];
+            start_file2++;
+            anData->comparisonCount++;
+            anData->swapCount++;
+        }
+        free_pos++;
+    }
+    for(index = start_file1; index <= middle; index++, free_pos++){
+        aux_file[free_pos] = array[index];
+        anData->comparisonCount++;
+    }
+    for(index = start_file2; index <= left; index++, free_pos++){
+        aux_file[free_pos] = array[index];
+        anData->comparisonCount++;
+    }
+    for(index = left; index <= right; index++){
+        array[index] = aux_file[index];
+        anData->comparisonCount++;
+    }
+}
 
 void and_quick_sort(int array[], int left, int right, TAnalyticsData *anData){
     if(left < right){

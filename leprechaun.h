@@ -1,7 +1,7 @@
 #include "utils.h"
 #include <stdbool.h>
 #include <stdlib.h>
-
+#include <limits.h>
 #define HEADER_INFO 2
 
 struct TimeTest{
