@@ -103,13 +103,13 @@ void bubble_sort(int array[], int length){
     for(i = 0; i < length; i++){
         for(j = 0; j < length - 1; j++){
             if(array[j] > array[j + 1]){
-                length = array[j];
+                aux = array[j];
                 array[j] = array[j + 1];
-                array[j + 1] = length;
+                array[j + 1] = aux;
             }
         }
     }
-}; //TODO: Implementar Bubble Sort
+}
 
 void insertion_sort(int array[], int length){    
     for(int i = 1; i<length; i++){
@@ -133,7 +133,7 @@ void merge_sort(int array[], int left, int right){
         merge_sort(array, middle+1, right);
         merge_sorted_arrays(array, left, right, middle);
     }
-}; //TODO: Implementar Merge Sort
+}
 
 void merge_sorted_arrays(int array[], int left, int right, int middle){
     int free_pos, start_file1, start_file2, index;
@@ -159,10 +159,10 @@ void merge_sorted_arrays(int array[], int left, int right, int middle){
         aux_file[free_pos] = array[index];
     }
     for(index = left; index <= right; index++){
-        array[index] = start_file1[index];
+        array[index] = aux_file[index];
     }
     
-};//TODO: Implementar Merge Sort
+}
 
 void quick_sort(int array[], int left, int right){
     if(left < right){
@@ -217,15 +217,15 @@ void and_bubble_sort(int array[], int length, TAnalyticsData *anData){
         for(j = 0; j < length - 1; j++){
             anData->comparisonCount++;
             if(array[j] > array[j + 1]){
-                length = array[j];
+                aux = array[j];
                 array[j] = array[j + 1];
-                array[j + 1] = length;
+                array[j + 1] = aux;
                 anData->swapCount++;
                 anData->comparisonCount++;
             }
         }
     }
-}//TODO: Implementar Bubble Sort com Analytics
+}
 
 void and_insertion_sort(int array[], int length, TAnalyticsData *anData){    
     for(int i = 1; i<length; i++){
@@ -254,7 +254,7 @@ void and_merge_sort(int array[], int left, int right, TAnalyticsData *anData){
         merge_sort(array, middle+1, right);
         merge_sorted_arrays(array, left, right, middle);
     }
-} //TODO: Implementar Merge Sort com Analytics
+}
 
 void and_merge_sorted_arrays(int array[], int left, int right, int middle, TAnalyticsData *anData){
         int free_pos, start_file1, start_file2, index;
@@ -286,10 +286,10 @@ void and_merge_sorted_arrays(int array[], int left, int right, int middle, TAnal
         anData->comparisonCount++;
     }
     for(index = left; index <= right; index++){
-        array[index] = start_file1[index];
+        array[index] = aux_file[index];
         anData->comparisonCount++;
     }
-} //TODO: Implementar Merge Sort com Analytics
+}
 
 void and_quick_sort(int array[], int left, int right, TAnalyticsData *anData){
     if(left < right){
