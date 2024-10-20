@@ -2,62 +2,48 @@
 #include <stdio.h>
 
 void main(){
-    //TODO: Get rid of all this test crap and do the actual menu!
+    //create_filled_data_set recebe: -Tamanho do data_set
+    //                               -Seed(se for 0, um valor aletório é
+    //                                     escolhido, se for definido o 
+    //                                     resultado é sempre igual);   
+    T_DataSet original_data_set = create_filled_data_set(1000000,0);
 
-    printf("Hi, this is a test menu! We must yet implement a cool more useful menu :)");
+    //create_empty_data_set recebe: -Tamaho do data_set(apenas aloca memória)
+    T_DataSet first_copy = create_empty_data_set(1000000);
+    T_DataSet second_copy = create_empty_data_set(1000000);
 
-    // int array[] = {6,5,3,4,7,8,9,2,1,0};
-    // int menu = 0;
-    // int size = get_array_length(sizeof(array), sizeof(array[0]));
-    // char name[1][10] = {"data"};
-    char file_name[20] = "teste_dataset";
-    printf("yy");
-    T_DataSet data_set;
-    printf("yo");
-    // data_set.data = array;
-    // data_set.size = size;
+    //copy_data_set recebe: -data_set de origem
+    //                      -data_set de destino
+    //nota: ele copia todos os outros atributos do data_set, não apenas o data;
+    copy_data_set(original_data_set, first_copy);
+    copy_data_set(original_data_set, second_copy);
 
-    T_CSV csv = {
-        .file_name = file_name,
-        .separator = ";",
-    };
-    printf("ya");
+    //reverse_data_set recebe: -data_set para performar o reverse
+    //nota: Inverte a array data e marca ou desmarcar os is_desc;
+    reverse_data_set(first_copy);
 
-    // strcpy(csv.column_names[0],name[0]);
+    //shuffle_data_set recebe: -data_set para performar o embaralhamento
+    //nota: Ele pega a seed salva na array data do data_set e usa ela para
+    //      embaralhar. Por tanto o resultado é reproduzível.
+    shuffle_data_set(second_copy);
 
-    load_dataset_from_csv(csv, data_set);
-    print_array(data_set.data,data_set.size);
+    char file_name[MAX_FILE_NAME] = "teste_file";
 
-    
-    // printf("This is an unsorted array :( \n");
-    // print_array(array, size);
+    //write_dataset_to_csv recebe: -data_set que será salvo
+    //                             -string com nome do arquivo
+    //                             -boolean(has_index), para definir se vai
+    //                              ou não salvar com index.
+    //                             -char separador
+    write_dataset_to_csv(first_copy,file_name,true,';');
 
-    // TAnalyticsData anData = {0,0,0};
 
-    // printf("Select an algorithm to sort it: \n 1-Selection Sort \n 2-Bubble Sort \n 3-Insertion Sort \n 4-Merge Sort \n 5-Quick Sort \n");
-    // scanf("%d", &menu);
+    //load_dataset_from_csv recebe: -nome do arquivo
+    //nota: Caso não seja encontrado, retorna um data_set vazio de tamanho 1;
+    T_DataSet data_set_read = load_dataset_from_csv(file_name);
 
-    // switch(menu){
-    //     case 1:
-    //         and_selection_sort(array,10,&anData);
-    //         break;
-    //     case 2:
-    //         break;
-    //     case 3:
-    //         and_insertion_sort(array,10,&anData);
-    //         break;
-    //     case 4:
-    //         break;
-    //     case 5:
-    //         and_quick_sort(array,0,9,&anData);
-    //         break;
-    //     default:
-    //         printf("Invalid option selected, so im using using quick sort instead \n");
-    //         and_quick_sort(array,0,9,&anData);
-    // }
+    print_array(data_set_read.data, data_set_read.size);
+    printf("size=%d, seed=%u",data_set_read.size, data_set_read.data[1]);
 
-    // printf("Hey! A sorted array :) \n");
-    // print_array(array, size);
-
-    // printf("c: %d, s: %d \n", anData.comparisonCount, anData.swapCount);
+    char file_name2[MAX_FILE_NAME] = "teste_file2";
+    write_dataset_to_csv(data_set_read,file_name2,true,';');
 }

@@ -2,23 +2,47 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#define HEADER_INFO 2
+
+struct TimeTest{
+    int first_result;
+    int second_result;
+    int third_result;
+    int avarage_result;
+};
+
+typedef struct TimeTest T_TimeTest;
 
 struct AnalyticsData {
     int comparisonCount;
     int swapCount;
-    int completionTime;
+    T_TimeTest completionTime;
 };
 
 typedef struct AnalyticsData TAnalyticsData;
 
 struct DataSet {
     int size;
-    int *data;
-    bool ordered;
+    unsigned int *data;
+    bool is_ordered;
     bool is_desc;
 };
 
 typedef struct DataSet T_DataSet;
+
+//DataSet Creation
+T_DataSet create_filled_data_set(int size, int seed);
+
+T_DataSet create_empty_data_set(int size);
+
+
+//DataSet Operations
+void copy_data_set(T_DataSet source, T_DataSet destination);
+
+void reverse_data_set(T_DataSet data_set);
+
+void shuffle_data_set(T_DataSet data_set);
+
 
 //Sort Algorithms without analytics
 void selection_sort(int array[], int length);
@@ -50,3 +74,4 @@ void and_merge_sorted_arrays(int array[], int left, int right, int middle, TAnal
 void and_quick_sort(int array[], int left, int right, TAnalyticsData *anData);
 
 int and_quick_sort_partition(int array[], int left, int right, TAnalyticsData *anData);
+

@@ -1,100 +1,103 @@
 #include "leprefile.h"
 
-FILE* write_dataset_to_csv(T_CSV csv, T_DataSet data_set){
-    FILE *file = fopen(strcat(csv.file_name,".csv"),"w");
+FILE* write_dataset_to_csv(T_DataSet data_set, char file_name[], bool has_index, char separator_character){
+    char separator[2];
 
+    separator[0] = separator_character;
+    separator[1] = '\0';
+
+    FILE *file = fopen(strcat(file_name,".csv"),"w");
     if(!file){
-        printf("Error while opening dataset %s", csv.file_name);
+        printf("Error while opening or creating dataset %s", file_name);
         return NULL;
     }
 
-    for(int l = -1; l < data_set.size; l++){
+    for(unsigned int l = 0; l < data_set.size; l++){
         char line[MAX_LINE_LENGTH] = "";
-        for(int c = 0; c < csv.column_ammount; c++){
-            char buffer[100];
-            if(l == -1){
-                if(csv.has_index){
-                    strcat(strcat(line,"index"),csv.separator);
-                }
-                strcat(strcat(line,csv.column_names[c]),csv.separator);
+        char buffer[100];
+        if(l == 0){
+            if(has_index){
+                strcat(strcat(line,"index"),separator);
+            }
+            strcat(strcat(line,"data"),separator);
+            strcat(line,"\n");
+        }
+        if(has_index){
+            if(l > 1){
+            sprintf(buffer,"%u",l-2);
+            strcat(line,buffer);
+            strcat(line,separator);
             }else{
-                if(csv.has_index){
-                    sprintf(buffer,"%d",l);
-                    strcat(line,buffer);
-                    strcat(line,csv.separator);
-                }
-                sprintf(buffer,"%d",data_set.data[l]);
-                strcat(line,buffer);
-                strcat(line,csv.separator);
+                strcat(line, l==0? "size" : "seed");
+                strcat(line,separator);
             }
         }
+        sprintf(buffer,"%u",data_set.data[l]);
+        strcat(line,buffer);
+        strcat(line,separator);
+        
         strcat(line,"\n");
         fprintf(file,"%s",line);
-
     }
 
     fclose(file);
 }
 
+T_DataSet load_dataset_from_csv(char file_name[]){
+    char line[MAX_LINE_LENGTH];
+    char extension[] = ".csv";
+    unsigned int line_count = 0, size = 0, seed = 0;
+    T_DataSet data_set = create_empty_data_set(1);
 
-// int split_csv_line(char *line, char *columns[], int max_columns) {
-//     int count = 0;
-//     char *token = strtok(line, ";");
-//     while (token != NULL && count < max_columns) {
-//         columns[count++] = token;
-//         token = strtok(NULL, ";");
-//     }
-//     return count;  // Return number of columns found
-// }
+    if(strstr(file_name,extension) == NULL){
+        strcat(file_name,extension);
+    }
 
+    FILE *file = fopen(file_name,"r");
 
-FILE* load_dataset_from_csv(T_CSV csv, T_DataSet data_set){
-    // FILE *file = fopen(strcat(csv.file_name,".csv"),"r");
+    if(!file){
+        printf("Error while opening dataset %s", file_name);
+        return data_set;
+    }
 
-    // if(!file){
-    //     printf("Error while opening dataset %s", csv.file_name);
-    //     return NULL;
-    // }
-
-    // char line[MAX_LINE_LENGTH];
-    // char *columns[100];
-    // int line_count = 0;
-    // int column_count = 0;
-    // printf("ya");
-    // int array[10000];
-    // printf("yb");
-    // int index_index = 0;
-    
-    // while(fgets(line, sizeof(line), file) != NULL){
-    //     int current_column = -1;
-        
-    //     line[strcspn(line, "\n")] = 0;
-    //     printf("ye");
-    //     char *token = strtok(line,csv.separator);
-    //     while(token != NULL){
-    //         current_column++;
-    //         if(line_count == 0){
-    //             if(token == "index"){
-    //                 csv.has_index = true;
-    //                 index_index = current_column;
-    //             }
-    //             column_count++;
-    //             strcpy(csv.column_names[column_count], token);
-    //         }else{
-    //             if(current_column != index_index) array[line_count-1] = atoi(token);
-    //             data_set.size++;
-    //         }
-    //         line_count++;
-    //         token = strtok(NULL, csv.separator);
-    //         printf("yo");
-    //     }
-    // }
-    //     data_set.data = array;
-    //     csv.column_ammount = column_count;
-    //     csv.line_ammount = line_count;
-    //     printf("i reached here\n");
-    //     print_array(data_set.data,data_set.size);
-
+    while(fgets(line, MAX_LINE_LENGTH, file) != NULL){
+        char *separator = strchr(line,';');
+        if(separator != NULL){
+            switch (line_count)
+            {
+            case 0:
+                printf("Reading file...");
+                break;
+            case 1:
+                size = atoi(separator+1);
+                if(size){
+                    data_set.size = size+HEADER_INFO;
+                    unsigned int *arr = (unsigned int *)malloc((size+HEADER_INFO+5) * sizeof(unsigned int));
+                    data_set.data = arr;
+                    data_set.data[0] = size;
+                }else{
+                    printf("Error while reading [%s] - no size found[%u]", file_name,size);
+                    return data_set;
+                }
+                break;
+            case 2:
+                seed = atoi(separator+1);
+                if(size && seed){
+                    data_set.data[1] = seed;
+                }else{
+                    printf("Error while reading [%s] - no seed found[%u]", file_name,seed);
+                    return data_set;
+                }
+                break;
+            default:
+                unsigned int value = atoi(separator+1);
+                data_set.data[line_count-1] = value;
+                break;
+            }
+        }
+        line_count++;
+    }
+    return data_set;
 }
 
-FILE* write_results_to_csv(T_CSV csv, TAnalyticsData analytics); //TODO: Escrever função que guarda resultados do teste.
+// FILE* write_results_to_csv(TAnalyticsData analytics); //TODO: Escrever função que guarda resultados do teste.
