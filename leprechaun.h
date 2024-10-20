@@ -1,7 +1,7 @@
 #include "utils.h"
 #include <stdbool.h>
 #include <stdlib.h>
-
+#include <limits.h>
 
 struct AnalyticsData {
     int comparisonCount;
