@@ -5,8 +5,34 @@ void main(){
     //create_filled_data_set recebe: -Tamanho do data_set
     //                               -Seed(se for 0, um valor aletório é
     //                                     escolhido, se for definido o 
-    //                                     resultado é sempre igual);   
-    T_DataSet original_data_set = create_filled_data_set(1000000,0);
+    //                                     resultado é sempre igual);
+    int data_set, digito;
+    printf("Olá, vamos criar um Data Set para o Leprechaun contar.\n");
+    
+    do{
+        printf("Escolha um dos tamanhos, digitando o número\n
+            1 - Criar um Data Set de 1000\n
+            2 - Criar um Data Set de 100000\n
+            3 - Criar um Data Set de 1000000\n");
+        scanf("%d", &digito);
+
+        switch (digito){
+        case 1:
+            data_set = 1000;
+            break;
+        case 2:
+            data_set = 100000;
+            break;
+        case 3:
+            data_set = 1000000;
+            break;
+        default:
+            printf("Digite um valor válido\n");
+            break;
+        }
+    }while (digito != 1 || digito != 2 || digito != 3);
+
+    T_DataSet original_data_set = create_filled_data_set(data_set);
 
     //create_empty_data_set recebe: -Tamaho do data_set(apenas aloca memória)
     T_DataSet first_copy = create_empty_data_set(1000000);
