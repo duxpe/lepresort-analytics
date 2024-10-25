@@ -4,7 +4,6 @@
 
 //DataSet Creation
 T_DataSet create_filled_data_set (int size, int seed){
-    //Caso a seed passada seja 0, uma seed aleatória será criada
     unsigned int *arr = (unsigned int *)malloc(
         (size+HEADER_INFO) * sizeof(unsigned int));
 
@@ -75,6 +74,118 @@ void shuffle_data_set(T_DataSet data_set){
         unsigned_swap(data_set.data, start, end);
         start += rand()%(10+iterations/(data_set.size/10));
         iterations++;
+    }
+}
+
+int get_avarage_time(int results[]){
+    int avarage = 0;
+    for(int i = 0; i < TEST_SAMPLE_QTT; i++){
+        avarage += results[i];
+    }
+    return avarage/TEST_SAMPLE_QTT;
+}
+
+//Test Wrapper Functions
+T_AnalyticsData run_test_case(T_DataSet data_set, enum Algorithm algorithm, enum TestType test_type){
+    T_AnalyticsData analytics;
+    analytics.algorithm = algorithm;
+    analytics.test_type = test_type;
+    printf("93\n");
+    for(int i = 0; i < TEST_SAMPLE_QTT+1; i++){
+        T_DataSet new_data = create_empty_data_set(data_set.size);
+        copy_data_set(data_set, new_data);
+        printf("97\n");
+        switch(test_type){
+            case avarageScenario:
+                printf("100\n");
+                shuffle_data_set(new_data);
+            break;
+            case worstScenario:
+                printf("104\n");
+                reverse_data_set(new_data);
+            break;
+            default:
+            break;
+        }
+        printf("107\n");
+        clock_t start, duration;
+        if(i < TEST_SAMPLE_QTT ){
+            switch(algorithm){
+                case selection:
+                    start = clock();
+                    selection_sort(new_data.data, new_data.size);
+                break;
+                case bubble:
+                    start = clock();
+                    bubble_sort(new_data.data, new_data.size);
+                break;
+                case insertion:
+                    start = clock();
+                    insertion_sort(new_data.data, new_data.size);
+                break;
+                case merge:
+                    start = clock();
+                    merge_sort(new_data.data, 0, new_data.size);
+                break;
+                case quick:
+                    start = clock();
+                    quick_sort(new_data.data, 0, new_data.size);
+                break;
+            }
+            duration = clock() - start;
+            analytics.completionTime.results[i] = duration * 1000 / CLOCKS_PER_SEC;
+        }else{
+            analytics.completionTime.avarage_result = get_avarage_time(analytics.completionTime.results);
+            switch(algorithm){
+                case selection:
+                    and_selection_sort(new_data.data,new_data.size,&analytics);
+                break;
+                case bubble:
+                    and_bubble_sort(new_data.data, new_data.size,&analytics);
+                break;
+                case insertion:
+                    and_insertion_sort(new_data.data, new_data.size,&analytics);
+                break;
+                case merge:
+                    and_merge_sort(new_data.data, 0, new_data.size,&analytics);
+                break;
+                case quick:
+                    and_quick_sort(new_data.data, 0, new_data.size,&analytics);
+                break;
+            }
+            
+        }
+        free(new_data.data);
+    }
+    return analytics;
+}
+
+void run_all_test_cases(T_DataSet data_set, T_AnalyticsData analytics[algorithm_size][test_type_size]){
+    for (int algorithms = 0; algorithms < algorithm_size; algorithms++){
+        for(int scenarios = 0; scenarios < test_type_size; scenarios++){
+            printf("+start a: %d, t: %d \n", algorithms, scenarios);
+            switch(algorithms){
+                case selection:
+                    printf("164\n");
+                    analytics[algorithms][scenarios] = run_test_case(data_set, selection, scenarios);
+                break;
+                case bubble:
+                    analytics[algorithms][scenarios] = run_test_case(data_set, bubble, scenarios);
+                break;
+                case insertion:
+                    analytics[algorithms][scenarios] = run_test_case(data_set, insertion, scenarios);
+                break;
+                case merge:
+                    analytics[algorithms][scenarios] = run_test_case(data_set, merge, scenarios);
+
+                break;
+                case quick:
+                    analytics[algorithms][scenarios] = run_test_case(data_set, quick, scenarios);
+                break;
+            }
+            printf("+done a: %d, t: %d \n", algorithms, scenarios);
+            printf("analytics comp: %d, swap: %d, time: %d \n \n", analytics[algorithms][scenarios].comparisonCount, analytics[algorithms][scenarios].swapCount, analytics[algorithms][scenarios].completionTime.avarage_result);
+        }
     }
 }
 
@@ -192,7 +303,7 @@ int quick_sort_partition(int array[], int left, int right){
 
 
 //Sort Algorithms w/ analytics
-void and_selection_sort(int array[], int length, TAnalyticsData *anData){
+void and_selection_sort(int array[], int length, T_AnalyticsData *anData){
     for(int i = 0; i<length-1; i++){
         int smallest_position = i;
         
@@ -209,7 +320,7 @@ void and_selection_sort(int array[], int length, TAnalyticsData *anData){
     }
 }
 
-void and_bubble_sort(int array[], int length, TAnalyticsData *anData){
+void and_bubble_sort(int array[], int length, T_AnalyticsData *anData){
         int i, j, aux;
     
     for(i = 0; i < length; i++){
@@ -227,7 +338,7 @@ void and_bubble_sort(int array[], int length, TAnalyticsData *anData){
     }
 }
 
-void and_insertion_sort(int array[], int length, TAnalyticsData *anData){    
+void and_insertion_sort(int array[], int length, T_AnalyticsData *anData){    
     for(int i = 1; i<length; i++){
         int current = array[i];
         int j = i-1;
@@ -245,7 +356,7 @@ void and_insertion_sort(int array[], int length, TAnalyticsData *anData){
 
 }
 
-void and_merge_sort(int array[], int left, int right, TAnalyticsData *anData){
+void and_merge_sort(int array[], int left, int right, T_AnalyticsData *anData){
         int middle;
     if(left < right){
         anData->swapCount++;
@@ -256,7 +367,7 @@ void and_merge_sort(int array[], int left, int right, TAnalyticsData *anData){
     }
 }
 
-void and_merge_sorted_arrays(int array[], int left, int right, int middle, TAnalyticsData *anData){
+void and_merge_sorted_arrays(int array[], int left, int right, int middle, T_AnalyticsData *anData){
         int free_pos, start_file1, start_file2, index;
     int aux_file[INT_MAX];
     start_file1 = left;
@@ -291,7 +402,7 @@ void and_merge_sorted_arrays(int array[], int left, int right, int middle, TAnal
     }
 }
 
-void and_quick_sort(int array[], int left, int right, TAnalyticsData *anData){
+void and_quick_sort(int array[], int left, int right, T_AnalyticsData *anData){
     if(left < right){
         int pivot_index = and_quick_sort_partition(array, left, right, anData);
 
@@ -300,7 +411,7 @@ void and_quick_sort(int array[], int left, int right, TAnalyticsData *anData){
     }
 }
 
-int and_quick_sort_partition(int array[], int left, int right, TAnalyticsData *anData){
+int and_quick_sort_partition(int array[], int left, int right, T_AnalyticsData *anData){
     int pivot_index = left + (right - left) / 2;
     swap(array, pivot_index, right);
     anData->swapCount++;

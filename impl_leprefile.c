@@ -100,4 +100,4 @@ T_DataSet load_dataset_from_csv(char file_name[]){
     return data_set;
 }
 
-// FILE* write_results_to_csv(TAnalyticsData analytics); //TODO: Escrever função que guarda resultados do teste.
+// FILE* write_results_to_csv(T_AnalyticsData analytics); //TODO: Escrever função que guarda resultados do teste.
