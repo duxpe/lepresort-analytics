@@ -2,29 +2,14 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <limits.h>
+
 #define HEADER_INFO 2
 
 #define TEST_SAMPLE_QTT 3
 
-enum Algorithm {
-    selection,
-    bubble,
-    insertion,
-    merge,
-    quick,
-    algorithm_size //Sempre manter algorithm_size como último enum
-};
-
-enum TestType {
-    bestScenario,
-    avarageScenario,
-    worstScenario,
-    test_type_size //Sempre manter test_type_size como último enum
-};
-
 struct TimeTest{
-    int results[TEST_SAMPLE_QTT];
-    int avarage_result;
+    double results[TEST_SAMPLE_QTT];
+    double avarage_result;
 };
 
 typedef struct TimeTest T_TimeTest;
@@ -32,8 +17,8 @@ typedef struct TimeTest T_TimeTest;
 struct AnalyticsData {
     enum Algorithm algorithm;
     enum TestType test_type;
-    int comparisonCount;
-    int swapCount;
+    unsigned int comparisonCount;
+    unsigned int swapCount;
     T_TimeTest completionTime;
 };
 
@@ -78,9 +63,9 @@ void merge_sort(int array[], int left, int right);
 
 void merge_sorted_arrays(int array[], int left, int right, int middle);
 
-void quick_sort(int array[], int left, int right);
+void quick_sort(int array[], unsigned int left, unsigned int right);
 
-int quick_sort_partition(int array[], int left, int right);
+unsigned int quick_sort_partition(int array[], unsigned int left, unsigned int right);
 
 
 //Sort Algorithms w/ analytics
@@ -94,7 +79,7 @@ void and_merge_sort(int array[], int left, int right, T_AnalyticsData *anData);
 
 void and_merge_sorted_arrays(int array[], int left, int right, int middle, T_AnalyticsData *anData);
 
-void and_quick_sort(int array[], int left, int right, T_AnalyticsData *anData);
+void and_quick_sort(int array[], unsigned int left, unsigned int right, T_AnalyticsData *anData);
 
-int and_quick_sort_partition(int array[], int left, int right, T_AnalyticsData *anData);
+unsigned int and_quick_sort_partition(int array[], unsigned int left, unsigned int right, T_AnalyticsData *anData);
 
