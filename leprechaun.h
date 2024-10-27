@@ -17,8 +17,8 @@ typedef struct TimeTest T_TimeTest;
 struct AnalyticsData {
     enum Algorithm algorithm;
     enum TestType test_type;
-    unsigned int comparisonCount;
-    unsigned int swapCount;
+    unsigned long long int comparisonCount;
+    unsigned long long int swapCount;
     T_TimeTest completionTime;
 };
 

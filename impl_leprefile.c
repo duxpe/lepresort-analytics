@@ -12,7 +12,7 @@ FILE* write_dataset_to_csv(T_DataSet data_set, char file_name[], bool has_index,
         return NULL;
     }
 
-    for(unsigned int l = 0; l < data_set.size; l++){
+    for(unsigned int l = 0; l < data_set.size+HEADER_INFO; l++){
         char line[MAX_LINE_LENGTH] = "";
         char buffer[100];
         if(l == 0){
@@ -136,11 +136,11 @@ FILE* write_results_to_csv(T_AnalyticsData anData, char file_name[], char separa
         strcat(line,buffer);
         strcat(line,separator);
 
-        sprintf(buffer,"%u",anData.comparisonCount);
+        sprintf(buffer,"%llu",anData.comparisonCount);
         strcat(line,buffer);
         strcat(line,separator);
 
-        sprintf(buffer,"%u",anData.swapCount);
+        sprintf(buffer,"%llu",anData.swapCount);
         strcat(line,buffer);
         strcat(line,separator);
 

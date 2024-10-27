@@ -185,7 +185,7 @@ void main(){
         
         for (int a = 0; a < algorithm_size; a++){
             for(int s = 0; s < test_type_size; s++){
-                printf("Algo: %d, Test: %d, Comp: %d, Swap: %d, AvarageTime: %lf\n",
+                printf("Algo: %d, Test: %d, Comp: %llu, Swap: %llu, AvarageTime: %lf\n",
                     full_analytics[a][s].algorithm,
                     full_analytics[a][s].test_type,
                     full_analytics[a][s].comparisonCount,
@@ -197,7 +197,7 @@ void main(){
         }
     }else{
         for(int s = 0; s < test_type_size; s++){
-            printf("Algo: %d, Test: %d, Comp: %d, Swap: %d, AvarageTime: %lf\n",
+            printf("Algo: %d, Test: %d, Comp: %llu, Swap: %llu, AvarageTime: %lf\n",
                         analytics[s].algorithm,
                         analytics[s].test_type,
                         analytics[s].comparisonCount,

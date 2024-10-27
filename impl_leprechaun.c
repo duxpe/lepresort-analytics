@@ -167,10 +167,10 @@ T_AnalyticsData run_test_case(T_DataSet data_set, enum Algorithm algorithm, enum
         }
         free(new_data.data);
     }
-        char file_name2[MAX_FILE_NAME];
-        sprintf(file_name2,"file_%d_%d.csv",algorithm,test_type);
-        write_results_to_csv(analytics,file_name2,';');
-        sprintf(file_name2,"             ");
+        char result_file_name[MAX_FILE_NAME];
+        sprintf(result_file_name,"gold_pot_%d_results_%d_%d.csv",data_set.size,algorithm,test_type);
+        write_results_to_csv(analytics,result_file_name,';');
+        sprintf(result_file_name,"             ");
         return analytics;
 }
 
