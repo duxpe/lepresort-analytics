@@ -11,4 +11,4 @@ FILE* write_dataset_to_csv(T_DataSet data_set, char file_name[], bool has_index,
 
 T_DataSet load_dataset_from_csv(char file_name[]);
 
-// FILE* write_results_to_csv(TAnalyticsData analytics);
+FILE* write_results_to_csv(T_AnalyticsData anData, char file_name[], char separator_character);
